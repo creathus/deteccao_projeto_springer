@@ -1,21 +1,21 @@
 # Detecção de pinos e molas para o Projeto Springer - SALCOMP
 O projeto tem como base principal usar o [PyTorch YOLOv3](https://github.com/eriklindernoren/PyTorch-YOLOv3) a fim de detectar elementos presentes na fonte de alimentação do Springer. Estes elementos foram classificados como **Pino** e **Molas**
 
-[YOLO](https://pjreddie.com/darknet/yolo/) (**You Only Look Once**) é um modelo de rede neural profunda o qual está otimizado para obter detecções em velocidades elevadas, isto é, torna-se uma boa opção para rodar em **VÍDEO**. O desempenho funciona muito melhor se o computador tem uma GPU deidicada da NVIDIA.
+[YOLO](https://pjreddie.com/darknet/yolo/) (**You Only Look Once**) é um modelo de rede neural profunda o qual está otimizado para obter detecções em velocidades elevadas, isto é, torna-se uma boa opção para rodar em **VÍDEO**. O desempenho funciona muito melhor se o computador tem uma GPU dedicada da NVIDIA.
 
-Por default este modelo esta pre entrenado para detecta 80 distintos objetos, la lista de estos se encuentra en el archivo [data/coco.names](https://github.com/puigalex/deteccion-objetos-video/blob/master/data/coco.names)
+Por default este modelo foi treinado para dados customizados, ou seja, usando um **dataset** criado a partir de imagens obtidas do projeto em questão. O mesmo escontra-se em ```/data/custom```.
 
-Los pasos a seguir para poder correr detección de objetos en el video de una webcam son los siguientes (La creación del ambiente asume que Anaconda esta instalado en la computadora):
+As etapas a seguir, tem como objetivo utilizar a detecção dos elementos do Springer, utilizando uma Webcam Logitech BRIO 4K. Para isso, usando o Anaconda ou Pycharm, cria-se um ambiente virtual no computador.
 
-# Crear ambiente
-Para tener en orden nuestras paqueterias de python primero vamos a crear un ambiente llamado "deteccionobj" el cual tiene la version 3.6 de python
+# Criação do ambiente no Pycharm
+Cria-se un ambiente chamado ```springer_yolo``` o qual tem a versão 3.6 do interpretador **Python**.
 ``` 
-conda create -n deteccionobj python=3.6
+python -n springer_yolo python=3.6
 ```
 
-Activamos el ambiente deteccionobj para asegurarnos que estemos en el ambiente correcto al momento de hacer la instalación de todas las paqueterias necesarias
+É necessário ativarmos o ambiente ```springer_yolo```, antes de instalarmos os requisitos principais para o funcionamento do algoritmo.
 ```
-source activate deteccionobj
+source activate springer_yolo
 ```
 
 # Instalación de las paqueterias
