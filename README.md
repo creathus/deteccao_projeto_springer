@@ -48,45 +48,48 @@ Caso seja necessário rodar o script com algum vídeo do processo treinado sendo
 ```
 python deteccao_video.py --webcam 0 --diretorio_do_video <nome_do_arquivo.mp4>
 ```
-# TODO - treinamento e relação de treino e validação
-<!-- # Entrenamiento 
+# Treinamento
 
-Ahora, si lo que quieres es entrenar un modelo con las clases que tu quieras y no utilizar las 80 clases que vienen por default podemos entrenar nuestro propio modelo. Estos son los pasos que deberás seguir:
+Para o presente projeto deve-se criar um modelo com as classes que são necessárias, tais como: "pino e molas". Tome cuidado para que o dataset do próprio Yolo seja incluído, pois resultará em ruídos desnecessários para a solução. A seguir, são demonstrados como serão reaizados as etapas de treinamento e geração de **labels** customizado.
 
-Primero deberás etiquetar las imagenes con el formato VOC, aqui tengo un video explicando como hacer este etiquetado: 
+1. Reotule as imagens no formato YOLO. Para isso, instale o SW [labelImg](https://github.com/tzutalin/labelImg) para windows ou Linux. Caso dê algum tipo de problema que não permita criar as classes ou que não consiga excluir as classes já existentes, é possível instalar pelo terminal através da execução do seguinte comando:
+```
+pip install labelImg
+```
+2. Dentro do diretório ```/data/custom```, crie 2 diretórios chamados **images** e **labels**. As imagenes rotuladas devem no **data/custom/images** enquanto que o **metadata** tem que estar em **data/custom/labels**.
+Para cada ```imagen.jpg``` deve de existir um arquivo imagen.txt (metadata com o mesmo nome da imagen)
 
-Desde la carpeta config correremos el archivo create_custom_model para generar un archivo .cfg el cual contiene información sobre la red neuronal para correr las detecciones
+3. Dentro do diretório ```config```, é necessário executar o arquivo **create_custom_model** para geral um arquivo **.cfg**, o qual contém a informação sobre a rede neural para executar as detecções. Deve-se informar também, o número de classes. Veja o comando abaixo que deve ser executado.
 ```
 cd config
 bash create_custom_model.sh <Numero_de_clases_a_detectar>
 cd ..
 ```
-Descargamos la estructura de pesos de YOLO para poder hacer transfer learning sobre esos pesos
+
+4. Agora é necessário fazemos o download da estrutura dos pesos do YOLO para transferir o **learning** nos pesos.
+
 ```
 cd weights
 bash download_darknet.sh
 cd ..
 ```
 
-## Poner las imagenes y archivos de metadata en las carpetar necesarias
+5. O arquivo ```data/custom/classes.names``` deve conter o nome das classes de acordo como foram rotuladas.
 
-Las imagenes etiquetadas tienen que estar en el directorio **data/custom/images** mientras que las etiquetas/metadata de las imagenes tienen que estar en **data/custom/labels**.
-Por cada imagen.jpg debe de existir un imagen.txt (metadata con el mismo nombre de la imagen)
-
-El archivo ```data/custom/classes.names``` debe contener el nombre de las clases, como fueron etiquetadas, un renglon por clase.
-
-Los archivos ```data/custom/valid.txt``` y ```data/custom/train.txt``` deben contener la dirección donde se encuentran cada una de las imagenes. Estos se pueden generar con el siguiente comando (estando las imagenes ya dentro de ```data/custom/images```)
+6. Os arquivos ```data/custom/valid.txt``` e ```data/custom/train.txt``` devem conter o endereço de as imagens se encontram. Isto pode ser gerado com a execução do seguinte comando (considerando que as imagens estão dentro de ```data/custom/images```)
 ```
 python split_train_val.py
 ```
 
-## Entrenar
+## Execução do treinamento
 
  ```
  python train.py --model_def config/yolov3-custom.cfg --data_config config/custom.data --pretrained_weights weights/darknet53.conv.74 --batch_size 2
  ```
 
-## Correr deteccion de objetos en video con nuestras clases
+## Script de execução para detecção de molas e medidas entre os pinos em vídeo
 ```
 python deteccion_video.py --model_def config/yolov3-custom.cfg --checkpoint_model checkpoints/yolov3_ckpt_99.pth --class_path data/custom/classes.names  --weights_path checkpoints/yolov3_ckpt_99.pth  --conf_thres 0.85
-``` -->
+```
+
+O threshold é um argumento de entrada que pode ser modificado conforme o nível de confiabilidade do treinamento, isto é, quanto maior o **Threshold** -- o nível de acerto será melhor. Ao mesmo tempo, isso significa que o **dataset** deve ser maior e isso requer uma maior rotulação de imagens.
