@@ -25,31 +25,31 @@ pip install -r requirements.txt
 ```
 
 # Realizar o Download dos modelos treinados e pesos 
-A fim de executar o modelo **Yolo** temos que realizar o download dos pesos da rede neural, os quais são os valores que possuem as conexões Para poder correr el modelo de yolo tendremos que descargar los pesos de la red neuronal, los pesos son los valores que tienen todas las conexiones entre las neuronas de la red neuronal de YOLO, este tipo de modelos son computacionalmente muy pesados de entrenar desde cero por lo cual descargar el modelo pre entrenado es una buena opción.
+A fim de executar o modelo **Yolo** temos que realizar o download dos pesos da rede neural, os quais são os valores que possuem as conexões entre os neurônios da Rede neural principal do Yolo.  O modelo do Yolo pode ser pesado, por isso, é melhor criar o seu próprio dataset e treinar o modelo a partir dos novos dados.
 
 ```
 bash weights/download_weights.sh
 ```
 
-Movemos los pesos descargados a la carpeta llamada weights
+Movemos os pesos baixados na pasta chamada weights
 ```
 mv yolov3.weights weights/
 ```
 
-# Correr el detector de objetos en video 
-Por ultimo corremos este comando el cual activa la camara web para poder hacer deteccion de video sobre un video "en vivo"
+# Executar o detector de objetos em vídeo
+Para a aplicação do Projeto Springer, podemos executar o script ```deteccao_video.py``` e dessa forma abrir a câmera de vídeo (webcam). Em ambientes linux, verifique em qual **device** a sua câmera está sendo reconhecida. Para isso, utilize o comando no terminal ```ls /dev/video*```.
 ```
-python deteccion_video.py
-```
-
-# Modificaciones
-Si en vez de correr detección de objetos sobre la webcam lo que quieres es correr el modelo sobre un video que ya fue pre grabado tienes que cambiar el comando para correr el codigo a:
-
-```
-python deteccion_video.py --webcam 0 --directorio_video <directorio_al_video.mp4>
+python deteccao_video.py
 ```
 
-# Entrenamiento 
+# Notificações
+Caso seja necessário rodar o script com algum vídeo do processo treinado sendo executado, digite o seguinte comando no terminal.
+
+```
+python deteccao_video.py --webcam 0 --diretorio_do_video <nome_do_arquivo.mp4>
+```
+# TODO - treinamento e relação de treino e validação
+<!-- # Entrenamiento 
 
 Ahora, si lo que quieres es entrenar un modelo con las clases que tu quieras y no utilizar las 80 clases que vienen por default podemos entrenar nuestro propio modelo. Estos son los pasos que deberás seguir:
 
@@ -89,4 +89,4 @@ python split_train_val.py
 ## Correr deteccion de objetos en video con nuestras clases
 ```
 python deteccion_video.py --model_def config/yolov3-custom.cfg --checkpoint_model checkpoints/yolov3_ckpt_99.pth --class_path data/custom/classes.names  --weights_path checkpoints/yolov3_ckpt_99.pth  --conf_thres 0.85
-```
+``` -->
