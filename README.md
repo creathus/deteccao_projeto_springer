@@ -18,14 +18,14 @@ python -n springer_yolo python=3.6
 source activate springer_yolo
 ```
 
-# Instalación de las paqueterias
-Estando dentro de nuestro ambiente vamos a instalar todas las paqueterias necesarias para correr nuestro detector de objetos en video, la lista de los paqueter y versiones a instalar están dentro del archivo requirements.txt por lo cual instalaremos haciendo referencia a ese archivo
+# Instalação dos pacotes necessários para o ambiente virtual
+Dentro do arquivo ```requirements.txt``` encontram-se os pacotes necessários de acordo com a versão também. No terminal de comando do Pycharm, digite:
 ```
 pip install -r requirements.txt
 ```
 
-# Descargar los pesos del modelo entrenado 
-Para poder correr el modelo de yolo tendremos que descargar los pesos de la red neuronal, los pesos son los valores que tienen todas las conexiones entre las neuronas de la red neuronal de YOLO, este tipo de modelos son computacionalmente muy pesados de entrenar desde cero por lo cual descargar el modelo pre entrenado es una buena opción.
+# Realizar o Download dos modelos treinados e pesos 
+A fim de executar o modelo **Yolo** temos que realizar o download dos pesos da rede neural, os quais são os valores que possuem as conexões Para poder correr el modelo de yolo tendremos que descargar los pesos de la red neuronal, los pesos son los valores que tienen todas las conexiones entre las neuronas de la red neuronal de YOLO, este tipo de modelos son computacionalmente muy pesados de entrenar desde cero por lo cual descargar el modelo pre entrenado es una buena opción.
 
 ```
 bash weights/download_weights.sh
