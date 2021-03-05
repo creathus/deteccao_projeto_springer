@@ -2,17 +2,14 @@ from __future__ import division
 from models import *
 from utils.utils import *
 from utils.datasets import *
-import os
-import sys
 import argparse
 import cv2
-from PIL import Image
 import torch
 from torch.autograd import Variable
 
 
-def Convertir_RGB(img):
-    # Convertir Blue, green, red a Red, green, blue
+def converter_rgb(img):
+    # Converter Blue, green, red a Red, green, blue
     b = img[:, :, 0].copy()
     g = img[:, :, 1].copy()
     r = img[:, :, 2].copy()
@@ -22,8 +19,8 @@ def Convertir_RGB(img):
     return img
 
 
-def Convertir_BGR(img):
-    # Convertir red, blue, green a Blue, green, red
+def converter_bgr(img):
+    # Converter red, blue, green a Blue, green, red
     r = img[:, :, 0].copy()
     g = img[:, :, 1].copy()
     b = img[:, :, 2].copy()
@@ -36,16 +33,16 @@ def Convertir_BGR(img):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--image_folder", type=str, default="data/samples", help="path to dataset")
-    parser.add_argument("--model_def", type=str, default="config/yolov3.cfg", help="path to model definition file")
-    parser.add_argument("--weights_path", type=str, default="weights/yolov3.weights", help="path to weights file")
-    parser.add_argument("--class_path", type=str, default="data/coco.names", help="path to class label file")
-    parser.add_argument("--conf_thres", type=float, default=0.8, help="object confidence threshold")
-    parser.add_argument("--webcam", type=int, default=1, help="Is the video processed video? 1 = Yes, 0 == no")
+    parser.add_argument("--model_def", type=str, default="config/yolov3-custom.cfg", help="path to model definition file")
+    parser.add_argument("--weights_path", type=str, default="checkpoints/yolov3_ckpt_99.pth", help="path to weights file")
+    parser.add_argument("--class_path", type=str, default="data/custom/classes.names", help="path to class label file")
+    parser.add_argument("--conf_thres", type=float, default=0.9, help="object confidence threshold")
+    parser.add_argument("--webcam", type=int, default=0, help="Is the video processed video? 1 = Yes, 0 == no")
     parser.add_argument("--nms_thres", type=float, default=0.4, help="iou thresshold for non-maximum suppression")
     parser.add_argument("--batch_size", type=int, default=1, help="size of the batches")
     parser.add_argument("--n_cpu", type=int, default=0, help="number of cpu threads to use during batch generation")
     parser.add_argument("--img_size", type=int, default=416, help="size of each image dimension")
-    parser.add_argument("--directorio_video", type=str, help="Directorio al video")
+    parser.add_argument("--directorio_video", type=str, default="videos/salcomp.mp4", help="Directorio al video")
     parser.add_argument("--checkpoint_model", type=str, help="path to checkpoint model")
     opt = parser.parse_args()
     print(opt)
@@ -64,21 +61,21 @@ if __name__ == "__main__":
     if opt.webcam == 1:
         cap = cv2.VideoCapture(0)
         # cap.set(10, 180)
-        out = cv2.VideoWriter('output.mp4', cv2.VideoWriter_fourcc('M', 'J', 'P', 'G'), 10, (1280, 960))
+        out = cv2.VideoWriter('output.mp4', cv2.VideoWriter_fourcc('M', 'J', 'P', 'G'), 10, (1920, 1080)) #(1280, 960)
     else:
         cap = cv2.VideoCapture(opt.directorio_video)
         # frame_width = int(cap.get(3))
         # frame_height = int(cap.get(4))
-        out = cv2.VideoWriter('outp.mp4', cv2.VideoWriter_fourcc('M', 'J', 'P', 'G'), 10, (1280, 960))
+        out = cv2.VideoWriter('outp.mp4', cv2.VideoWriter_fourcc('M', 'J', 'P', 'G'), 10, (1920, 1080))
     colors = np.random.randint(0, 255, size=(len(classes), 3), dtype="uint8")
     a = []
     while cap:
         ret, frame = cap.read()
         if ret is False:
             break
-        frame = cv2.resize(frame, (1280, 960), interpolation=cv2.INTER_CUBIC)
-        # LA imagen viene en Blue, Green, Red y la convertimos a RGB que es la entrada que requiere el modelo
-        RGBimg = Convertir_RGB(frame)
+        frame = cv2.resize(frame, (1920, 1080), interpolation=cv2.INTER_CUBIC)
+        # A imagem vem em BGR e é convertida em RGB que é o que o modelo requer
+        RGBimg = converter_rgb(frame)
         imgTensor = transforms.ToTensor()(RGBimg)
         imgTensor, _ = pad_to_square(imgTensor, 0)
         imgTensor = resize(imgTensor, 416)
@@ -96,24 +93,24 @@ if __name__ == "__main__":
                     box_w = x2 - x1
                     box_h = y2 - y1
                     color = [int(c) for c in colors[int(cls_pred)]]
-                    print("Se detectó {} en X1: {}, Y1: {}, X2: {}, Y2: {}".format(classes[int(cls_pred)], x1, y1, x2,
+                    print("Detectou-se {} en X1: {}, Y1: {}, X2: {}, Y2: {}".format(classes[int(cls_pred)], x1, y1, x2,
                                                                                    y2))
                     frame = cv2.rectangle(frame, (x1, y1 + box_h), (x2, y1), color, 5)
                     cv2.putText(frame, classes[int(cls_pred)], (x1, y1), cv2.FONT_HERSHEY_SIMPLEX, 1, color,
-                                5)  # Nombre de la clase detectada
+                                5)  # Nome da classe detectada
                     cv2.putText(frame, str("%.2f" % float(conf)), (x2, y2 - box_h), cv2.FONT_HERSHEY_SIMPLEX, 0.5,
-                                color, 5)  # Certeza de prediccion de la clase
+                                color, 5)  # Certeza de predição da classe
         #
-        # Convertimos de vuelta a BGR para que cv2 pueda desplegarlo en los colores correctos
+        # Convertemos de volta a BGR para que OpenCV possa colocar nas cores corretas
 
         if opt.webcam == 1:
-            cv2.imshow('frame', Convertir_BGR(RGBimg))
+            cv2.imshow('frame', converter_bgr(RGBimg))
             out.write(RGBimg)
         else:
-            out.write(Convertir_BGR(RGBimg))
-            cv2.imshow('frame', RGBimg)
+            out.write(converter_bgr(RGBimg))
+            cv2.imshow('Salcomp Processo', RGBimg)
         # cv2.waitKey(0)
-
+        # Pressione Q no teclado para terminar o processo de execução do algoritmo (quit)
         if cv2.waitKey(25) & 0xFF == ord('q'):
             break
     out.release()

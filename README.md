@@ -59,10 +59,10 @@ pip install labelImg
 2. Dentro do diretório ```/data/custom```, crie 2 diretórios chamados **images** e **labels**. As imagenes rotuladas devem no **data/custom/images** enquanto que o **metadata** tem que estar em **data/custom/labels**.
 Para cada ```imagen.jpg``` deve de existir um arquivo imagen.txt (metadata com o mesmo nome da imagen)
 
-3. Dentro do diretório ```config```, é necessário executar o arquivo **create_custom_model** para geral um arquivo **.cfg**, o qual contém a informação sobre a rede neural para executar as detecções. Deve-se informar também, o número de classes. Veja o comando abaixo que deve ser executado.
+3. Dentro do diretório ```config```, é necessário executar o arquivo **create_custom_model** para geral um arquivo **.cfg**, o qual contém a informação sobre a rede neural para executar as detecções. Deve-se informar também, o número de classes (no nosso caso são 2 -- pinos e molas). Veja o comando abaixo que deve ser executado.
 ```
 cd config
-bash create_custom_model.sh <Numero_de_clases_a_detectar>
+bash create_custom_model.sh <Numero_de_classes_a_detectar>
 cd ..
 ```
 
