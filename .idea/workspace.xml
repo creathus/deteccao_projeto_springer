@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="90716c27-f32b-4d93-899a-e11ac3ac12d8" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/deteccion-objetos-video.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/100_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/101_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/102_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/103_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/104_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/105_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/106_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/107_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/108_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/109_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/10_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/110_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/111_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/112_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/11_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/12_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/13_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/14_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/15_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/16_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/17_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/18_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/19_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/1_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/20_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/21_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/22_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/23_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/24_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/25_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/26_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/27_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/28_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/29_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/2_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/30_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/31_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/32_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/33_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/34_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/35_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/36_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/37_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/38_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/39_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/3_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/40_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/41_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/42_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/43_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/44_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/45_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/46_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/47_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/48_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/49_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/4_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/50_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/51_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/52_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/53_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/54_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/55_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/56_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/57_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/58_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/59_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/5_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/60_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/61_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/62_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/63_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/64_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/65_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/66_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/67_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/68_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/69_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/6_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/70_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/71_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/72_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/73_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/74_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/75_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/76_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/77_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/78_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/79_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/7_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/80_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/81_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/82_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/83_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/84_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/85_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/86_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/87_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/88_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/89_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/8_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/90_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/91_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/92_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/93_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/94_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/95_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/96_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/97_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/98_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/99_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/9_img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1pJbHQXH37mbms8G9xbP2pSc3Wd" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+  </component>
+  <component name="RunManager" selected="Python.detect">
+    <configuration name="deteccao_video" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="deteccao_projeto_springer" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/deteccao_video.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="detect" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="deteccao_projeto_springer" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/detect.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.detect" />
+        <item itemvalue="Python.deteccao_video" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="90716c27-f32b-4d93-899a-e11ac3ac12d8" name="Default Changelist" comment="" />
+      <created>1614904051296</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1614904051296</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+</project>
