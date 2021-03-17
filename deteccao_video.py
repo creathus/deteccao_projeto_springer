@@ -36,13 +36,13 @@ if __name__ == "__main__":
     parser.add_argument("--model_def", type=str, default="config/yolov3-custom.cfg", help="path to model definition file")
     parser.add_argument("--weights_path", type=str, default="checkpoints/yolov3_ckpt_99.pth", help="path to weights file")
     parser.add_argument("--class_path", type=str, default="data/custom/classes.names", help="path to class label file")
-    parser.add_argument("--conf_thres", type=float, default=0.9, help="object confidence threshold")
+    parser.add_argument("--conf_thres", type=float, default=0.8, help="object confidence threshold")
     parser.add_argument("--webcam", type=int, default=0, help="Is the video processed video? 1 = Yes, 0 == no")
     parser.add_argument("--nms_thres", type=float, default=0.4, help="iou thresshold for non-maximum suppression")
     parser.add_argument("--batch_size", type=int, default=1, help="size of the batches")
     parser.add_argument("--n_cpu", type=int, default=0, help="number of cpu threads to use during batch generation")
     parser.add_argument("--img_size", type=int, default=416, help="size of each image dimension")
-    parser.add_argument("--directorio_video", type=str, default="videos/salcomp.mp4", help="Directorio al video")
+    parser.add_argument("--directorio_video", type=str, default="videos/fhd_c_ilum.mp4", help="Directorio al video")
     parser.add_argument("--checkpoint_model", type=str, help="path to checkpoint model")
     opt = parser.parse_args()
     print(opt)
@@ -86,6 +86,8 @@ if __name__ == "__main__":
             detections = model(imgTensor)
             detections = non_max_suppression(detections, opt.conf_thres, opt.nms_thres)
 
+        name_list = []
+
         for detection in detections:
             if detection is not None:
                 detection = rescale_boxes(detection, opt.img_size, RGBimg.shape[:2])
@@ -93,14 +95,19 @@ if __name__ == "__main__":
                     box_w = x2 - x1
                     box_h = y2 - y1
                     color = [int(c) for c in colors[int(cls_pred)]]
-                    print("Detectou-se {} en X1: {}, Y1: {}, X2: {}, Y2: {}".format(classes[int(cls_pred)], x1, y1, x2,
-                                                                                   y2))
+                    # print("Detectou-se {} en X1: {}, Y1: {}, X2: {}, Y2: {}".format(classes[int(cls_pred)], x1, y1, x2,
+                    #                                                                 y2))
                     frame = cv2.rectangle(frame, (x1, y1 + box_h), (x2, y1), color, 5)
                     cv2.putText(frame, classes[int(cls_pred)], (x1, y1), cv2.FONT_HERSHEY_SIMPLEX, 1, color,
                                 5)  # Nome da classe detectada
                     cv2.putText(frame, str("%.2f" % float(conf)), (x2, y2 - box_h), cv2.FONT_HERSHEY_SIMPLEX, 0.5,
                                 color, 5)  # Certeza de predição da classe
-        #
+
+                    classes_dict = {'medidas 1': int(x1), 'classe 1': classes[int(cls_pred)], 'medidas 2': int(y1),
+                                    'classe 2': classes[int(cls_pred)], 'medidas 3': int(x2), 'classe 3': classes[int(cls_pred)],
+                                    'medidas 4': int(x2), 'classe 4': classes[int(cls_pred)]}
+                    name_list.append(classes_dict)
+                    print(classes_dict)
         # Convertemos de volta a BGR para que OpenCV possa colocar nas cores corretas
 
         if opt.webcam == 1:
