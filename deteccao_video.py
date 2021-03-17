@@ -6,6 +6,7 @@ import argparse
 import cv2
 import torch
 from torch.autograd import Variable
+import json
 
 
 def converter_rgb(img):
@@ -97,17 +98,22 @@ if __name__ == "__main__":
                     color = [int(c) for c in colors[int(cls_pred)]]
                     # print("Detectou-se {} en X1: {}, Y1: {}, X2: {}, Y2: {}".format(classes[int(cls_pred)], x1, y1, x2,
                     #                                                                 y2))
-                    frame = cv2.rectangle(frame, (x1, y1 + box_h), (x2, y1), color, 5)
+                    frame = cv2.rectangle(frame, (x1, y1 + box_h), (x2, y1), color, 3)
                     cv2.putText(frame, classes[int(cls_pred)], (x1, y1), cv2.FONT_HERSHEY_SIMPLEX, 1, color,
-                                5)  # Nome da classe detectada
+                                3)  # Nome da classe detectada
                     cv2.putText(frame, str("%.2f" % float(conf)), (x2, y2 - box_h), cv2.FONT_HERSHEY_SIMPLEX, 0.5,
-                                color, 5)  # Certeza de predição da classe
+                                color, 3)  # Certeza de predição da classe
 
                     classes_dict = {'medidas 1': int(x1), 'classe 1': classes[int(cls_pred)], 'medidas 2': int(y1),
                                     'classe 2': classes[int(cls_pred)], 'medidas 3': int(x2), 'classe 3': classes[int(cls_pred)],
                                     'medidas 4': int(x2), 'classe 4': classes[int(cls_pred)]}
                     name_list.append(classes_dict)
                     print(classes_dict)
+
+                    # conversao dict para json format
+                    json_convert = json.dumps(classes_dict)
+                    print(json_convert)
+
         # Convertemos de volta a BGR para que OpenCV possa colocar nas cores corretas
 
         if opt.webcam == 1:
