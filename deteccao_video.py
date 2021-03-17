@@ -111,7 +111,7 @@ if __name__ == "__main__":
                     print(classes_dict)
 
                     # conversao dict para json format
-                    json_convert = json.dumps(classes_dict)
+                    json_convert = json.dumps(classes_dict,indent=4)
                     print(json_convert)
 
         # Convertemos de volta a BGR para que OpenCV possa colocar nas cores corretas

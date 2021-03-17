@@ -2,9 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ee5d3096-7dc4-4089-94f9-06473885284b" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/resultado_visao.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/deteccao_video.py" beforeDir="false" afterPath="$PROJECT_DIR$/deteccao_video.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/separar_frames.py" beforeDir="false" afterPath="$PROJECT_DIR$/separar_frames.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils/logger.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/logger.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yolo3/bin/freeze_graph" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
