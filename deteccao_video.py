@@ -1,12 +1,14 @@
 from __future__ import division
-from models import *
-from utils.utils import *
-from utils.datasets import *
+
 import argparse
-import cv2
-import torch
-from torch.autograd import Variable
 import json
+from json.decoder import JSONDecodeError
+
+import cv2
+
+from models import *
+from utils.datasets import *
+from utils.utils import *
 
 
 def converter_rgb(img):
@@ -31,11 +33,115 @@ def converter_bgr(img):
     return img
 
 
+def receive_protocol(message):
+    try:
+        return json.loads(message)
+    except JSONDecodeError:
+        return {"action": "unknow"}
+
+
+def build_response(message_id, result, measurements):
+    """
+    :param message_id: The message identifier who requested the test
+    :param result: the result of the test PASS/FAILL
+    :param measurements: the measurements used in the validation
+    :return: dict
+    """
+    protocol = {
+        "id": message_id,
+        "response": {
+            "status": result,
+            "data": measurements
+        }
+    }
+    return protocol
+
+
+class Detect:
+    def __init__(self, options):
+        self.opt = options
+        if opt.debug:
+            print(opt)
+        self._start_device()
+        self._start_model()
+        self._start_output()
+
+    def _start_device(self):
+        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        if self.opt.debug:
+            print("cuda" if torch.cuda.is_available() else "cpu")
+        self.Tensor = torch.cuda.FloatTensor if torch.cuda.is_available() else torch.FloatTensor
+
+    def _start_model(self):
+        self.model = Darknet(opt.model_def, img_size=opt.img_size).to(self.device)
+        if self.opt.weights_path.endswith(".weights"):
+            self.model.load_darknet_weights(opt.weights_path)
+        else:
+            self.model.load_state_dict(torch.load(opt.weights_path))
+        self.model.eval()
+        self.classes = load_classes(opt.class_path)
+
+    def _start_output(self):
+        if self.opt.webcam == 1:
+            self.cap = cv2.VideoCapture(0)
+            # cap.set(10, 180)
+            self.out = cv2.VideoWriter('output.mp4', cv2.VideoWriter_fourcc('M', 'J', 'P', 'G'), 10,
+                                       (1920, 1080))  # (1280, 960)
+        else:
+            self.cap = cv2.VideoCapture(self.opt.directorio_video)
+            # frame_width = int(cap.get(3))
+            # frame_height = int(cap.get(4))
+            self.out = cv2.VideoWriter('outp.mp4', cv2.VideoWriter_fourcc('M', 'J', 'P', 'G'), 10, (1920, 1080))
+        self.colors = np.random.randint(0, 255, size=(len(self.classes), 3), dtype="uint8")
+
+    def stop(self):
+        self.out.release()
+        self.cap.release()
+        cv2.destroyAllWindows()
+
+    def run(self):
+        while self.cap:
+            ret, frame = self.cap.read()
+            if ret is False:
+                return
+            frame = cv2.resize(frame, (1920, 1080), interpolation=cv2.INTER_CUBIC)
+            # A imagem vem em BGR e é convertida em RGB que é o que o modelo requer
+            RGBimg = converter_rgb(frame)
+            imgTensor = transforms.ToTensor()(RGBimg)
+            imgTensor, _ = pad_to_square(imgTensor, 0)
+            imgTensor = resize(imgTensor, 416)
+            imgTensor = imgTensor.unsqueeze(0)
+            imgTensor = Variable(imgTensor.type(self.Tensor))
+
+            with torch.no_grad():
+                detections = self.model(imgTensor)
+                detections = non_max_suppression(detections, opt.conf_thres, opt.nms_thres)
+
+            for detection in detections:
+                if detection is not None:
+                    detection = rescale_boxes(detection, opt.img_size, RGBimg.shape[:2])
+                    x1, y1, x2, y2, conf, cls_conf, cls_pred = detection[0]
+                    classes_dict = {
+                        'medidas_1': int(x1),
+                        'classe_1': self.classes[int(cls_pred)],
+                        'medidas_2': int(y1),
+                        'classe_2': self.classes[int(cls_pred)],
+                        'medidas_3': int(x2),
+                        'classe_3': self.classes[int(cls_pred)],
+                        'medidas_4': int(x2),
+                        'classe_4': self.classes[int(cls_pred)]
+                    }
+                    # conversao dict para json format
+                    return build_response("123", "PASS", classes_dict)
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--image_folder", type=str, default="data/samples", help="path to dataset")
-    parser.add_argument("--model_def", type=str, default="config/yolov3-custom.cfg", help="path to model definition file")
-    parser.add_argument("--weights_path", type=str, default="checkpoints/yolov3_ckpt_99.pth", help="path to weights file")
+    parser.add_argument("--model_def", type=str, default="config/yolov3-custom.cfg",
+                        help="path to model definition file")
+    parser.add_argument("--weights_path", type=str, default="checkpoints/yolov3_ckpt_99.pth",
+                        help="path to weights file")
     parser.add_argument("--class_path", type=str, default="data/custom/classes.names", help="path to class label file")
     parser.add_argument("--conf_thres", type=float, default=0.8, help="object confidence threshold")
     parser.add_argument("--webcam", type=int, default=0, help="Is the video processed video? 1 = Yes, 0 == no")
@@ -45,87 +151,36 @@ if __name__ == "__main__":
     parser.add_argument("--img_size", type=int, default=416, help="size of each image dimension")
     parser.add_argument("--directorio_video", type=str, default="videos/fhd_c_ilum.mp4", help="Directorio al video")
     parser.add_argument("--checkpoint_model", type=str, help="path to checkpoint model")
+    parser.add_argument("--show_result", type=bool, default=False, help="after the detection, should display the image")
+    parser.add_argument("--debug", type=bool, default=False, help="print debug messages in the execution")
     opt = parser.parse_args()
-    print(opt)
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    print("cuda" if torch.cuda.is_available() else "cpu")
-    model = Darknet(opt.model_def, img_size=opt.img_size).to(device)
 
-    if opt.weights_path.endswith(".weights"):
-        model.load_darknet_weights(opt.weights_path)
-    else:
-        model.load_state_dict(torch.load(opt.weights_path))
+    # Starts detection object
+    detection = Detect(opt)
 
-    model.eval()
-    classes = load_classes(opt.class_path)
-    Tensor = torch.cuda.FloatTensor if torch.cuda.is_available() else torch.FloatTensor
-    if opt.webcam == 1:
-        cap = cv2.VideoCapture(0)
-        # cap.set(10, 180)
-        out = cv2.VideoWriter('output.mp4', cv2.VideoWriter_fourcc('M', 'J', 'P', 'G'), 10, (1920, 1080)) #(1280, 960)
-    else:
-        cap = cv2.VideoCapture(opt.directorio_video)
-        # frame_width = int(cap.get(3))
-        # frame_height = int(cap.get(4))
-        out = cv2.VideoWriter('outp.mp4', cv2.VideoWriter_fourcc('M', 'J', 'P', 'G'), 10, (1920, 1080))
-    colors = np.random.randint(0, 255, size=(len(classes), 3), dtype="uint8")
-    a = []
-    while cap:
-        ret, frame = cap.read()
-        if ret is False:
-            break
-        frame = cv2.resize(frame, (1920, 1080), interpolation=cv2.INTER_CUBIC)
-        # A imagem vem em BGR e é convertida em RGB que é o que o modelo requer
-        RGBimg = converter_rgb(frame)
-        imgTensor = transforms.ToTensor()(RGBimg)
-        imgTensor, _ = pad_to_square(imgTensor, 0)
-        imgTensor = resize(imgTensor, 416)
-        imgTensor = imgTensor.unsqueeze(0)
-        imgTensor = Variable(imgTensor.type(Tensor))
+    # Waits for a command as protocol
+    try:
+        while True:
+            # Receive command
+            receive_cmd = receive_protocol(input())
 
-        with torch.no_grad():
-            detections = model(imgTensor)
-            detections = non_max_suppression(detections, opt.conf_thres, opt.nms_thres)
+            if receive_cmd["action"] == "test":
+                # Execute detection
+                result = detection.run()
 
-        name_list = []
+                # Send the result of detection to STDOUT
+                print(json.dumps(result))
+            elif receive_cmd["action"] == "ping":
+                print(json.dumps({
+                    "id": receive_cmd["id"],
+                    "action": "ping",
+                    "response": "pong"
+                }))
+            else:
+                print(json.dumps({
+                    "action": "unknown"
+                }))
 
-        for detection in detections:
-            if detection is not None:
-                detection = rescale_boxes(detection, opt.img_size, RGBimg.shape[:2])
-                for x1, y1, x2, y2, conf, cls_conf, cls_pred in detection:
-                    box_w = x2 - x1
-                    box_h = y2 - y1
-                    color = [int(c) for c in colors[int(cls_pred)]]
-                    # print("Detectou-se {} en X1: {}, Y1: {}, X2: {}, Y2: {}".format(classes[int(cls_pred)], x1, y1, x2,
-                    #                                                                 y2))
-                    frame = cv2.rectangle(frame, (x1, y1 + box_h), (x2, y1), color, 3)
-                    cv2.putText(frame, classes[int(cls_pred)], (x1, y1), cv2.FONT_HERSHEY_SIMPLEX, 1, color,
-                                3)  # Nome da classe detectada
-                    cv2.putText(frame, str("%.2f" % float(conf)), (x2, y2 - box_h), cv2.FONT_HERSHEY_SIMPLEX, 0.5,
-                                color, 3)  # Certeza de predição da classe
-
-                    classes_dict = {'medidas 1': int(x1), 'classe 1': classes[int(cls_pred)], 'medidas 2': int(y1),
-                                    'classe 2': classes[int(cls_pred)], 'medidas 3': int(x2), 'classe 3': classes[int(cls_pred)],
-                                    'medidas 4': int(x2), 'classe 4': classes[int(cls_pred)]}
-                    name_list.append(classes_dict)
-                    print(classes_dict)
-
-                    # conversao dict para json format
-                    json_convert = json.dumps(classes_dict,indent=4)
-                    print(json_convert)
-
-        # Convertemos de volta a BGR para que OpenCV possa colocar nas cores corretas
-
-        if opt.webcam == 1:
-            cv2.imshow('frame', converter_bgr(RGBimg))
-            out.write(RGBimg)
-        else:
-            out.write(converter_bgr(RGBimg))
-            cv2.imshow('Salcomp Processo', RGBimg)
-        # cv2.waitKey(0)
-        # Pressione Q no teclado para terminar o processo de execução do algoritmo (quit)
-        if cv2.waitKey(25) & 0xFF == ord('q'):
-            break
-    out.release()
-    cap.release()
-    cv2.destroyAllWindows()
+    except KeyboardInterrupt:
+        # Received interruption
+        detection.stop()
