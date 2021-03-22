@@ -2,12 +2,51 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ee5d3096-7dc4-4089-94f9-06473885284b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/resultado_visao.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/deteccao_video.py" beforeDir="false" afterPath="$PROJECT_DIR$/deteccao_video.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/logger.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/logger.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yolo3/bin/freeze_graph" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/yolo3/bin/activate" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/yolo3/bin/activate.csh" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/yolo3/bin/activate.fish" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/yolo3/bin/chardetect" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/yolo3/bin/convert-caffe2-to-onnx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/yolo3/bin/convert-onnx-to-caffe2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/yolo3/bin/estimator_ckpt_converter" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/yolo3/bin/f2py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/yolo3/bin/f2py3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/yolo3/bin/f2py3.6" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/yolo3/bin/futurize" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/yolo3/bin/google-oauthlib-tool" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/yolo3/bin/import_pb_to_tensorboard" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/yolo3/bin/isort" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/yolo3/bin/labelImg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/yolo3/bin/markdown_py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/yolo3/bin/pasteurize" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/yolo3/bin/pip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/yolo3/bin/pip3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/yolo3/bin/pip3.6" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/yolo3/bin/pylupdate5" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/yolo3/bin/pyrcc5" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/yolo3/bin/pyrsa-decrypt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/yolo3/bin/pyrsa-encrypt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/yolo3/bin/pyrsa-keygen" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/yolo3/bin/pyrsa-priv2pub" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/yolo3/bin/pyrsa-sign" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/yolo3/bin/pyrsa-verify" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/yolo3/bin/python" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/yolo3/bin/python3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/yolo3/bin/python3.6" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/yolo3/bin/pyuic5" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/yolo3/bin/saved_model_cli" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/yolo3/bin/tensorboard" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/yolo3/bin/tf_upgrade_v2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/yolo3/bin/tflite_convert" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/yolo3/bin/toco" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/yolo3/bin/toco_from_protos" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/yolo3/bin/tqdm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/yolo3/bin/wheel" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/yolo3/lib64" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/yolo3/pyvenv.cfg" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
