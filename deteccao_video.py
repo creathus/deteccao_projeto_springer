@@ -8,6 +8,12 @@ import torch
 from torch.autograd import Variable
 import json
 
+from pprint import pprint
+from operator import itemgetter
+
+import itertools
+from itertools import compress
+from random import randrange
 
 def converter_rgb(img):
     # Converter Blue, green, red a Red, green, blue
@@ -30,6 +36,12 @@ def converter_bgr(img):
     img[:, :, 2] = r
     return img
 
+# def calculate_centr(coord):
+#   return (coord[0]+(coord[2]/2), coord[1]+(coord[3]/2))
+#
+# def calculate_centr_distances(centroid_1, centroid_2):
+#   return  math.sqrt((centroid_2[0]-centroid_1[0])*2 + (centroid_2[1]-centroid_1[1])*2)
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -37,13 +49,13 @@ if __name__ == "__main__":
     parser.add_argument("--model_def", type=str, default="config/yolov3-custom.cfg", help="path to model definition file")
     parser.add_argument("--weights_path", type=str, default="checkpoints/yolov3_ckpt_99.pth", help="path to weights file")
     parser.add_argument("--class_path", type=str, default="data/custom/classes.names", help="path to class label file")
-    parser.add_argument("--conf_thres", type=float, default=0.8, help="object confidence threshold")
+    parser.add_argument("--conf_thres", type=float, default=0.85, help="object confidence threshold")
     parser.add_argument("--webcam", type=int, default=0, help="Is the video processed video? 1 = Yes, 0 == no")
     parser.add_argument("--nms_thres", type=float, default=0.4, help="iou thresshold for non-maximum suppression")
     parser.add_argument("--batch_size", type=int, default=1, help="size of the batches")
     parser.add_argument("--n_cpu", type=int, default=0, help="number of cpu threads to use during batch generation")
     parser.add_argument("--img_size", type=int, default=416, help="size of each image dimension")
-    parser.add_argument("--directorio_video", type=str, default="videos/fhd_c_ilum.mp4", help="Directorio al video")
+    parser.add_argument("--directorio_video", type=str, default="/home/cesarhcq/projeto_creathus_ws/deteccao_projeto_springer/videos/fhd_c_iluminacao", help="Directorio al video")
     parser.add_argument("--checkpoint_model", type=str, help="path to checkpoint model")
     opt = parser.parse_args()
     print(opt)
@@ -67,7 +79,9 @@ if __name__ == "__main__":
         cap = cv2.VideoCapture(opt.directorio_video)
         # frame_width = int(cap.get(3))
         # frame_height = int(cap.get(4))
-        out = cv2.VideoWriter('outp.mp4', cv2.VideoWriter_fourcc('M', 'J', 'P', 'G'), 10, (1920, 1080))
+        # fourcc = cv2.VideoWriter_fourcc(*'MPEG')
+        # out = cv2.VideoWriter('output.avi', fourcc, 20.0, (640, 480))
+        # out = cv2.VideoWriter('outp.mp4', cv2.VideoWriter_fourcc('M', 'J', 'P', 'G'), 10, (1920, 1080))
     colors = np.random.randint(0, 255, size=(len(classes), 3), dtype="uint8")
     a = []
     while cap:
@@ -87,7 +101,8 @@ if __name__ == "__main__":
             detections = model(imgTensor)
             detections = non_max_suppression(detections, opt.conf_thres, opt.nms_thres)
 
-        name_list = []
+        lista_mola = []
+        lista_pino = []
 
         for detection in detections:
             if detection is not None:
@@ -104,28 +119,59 @@ if __name__ == "__main__":
                     cv2.putText(frame, str("%.2f" % float(conf)), (x2, y2 - box_h), cv2.FONT_HERSHEY_SIMPLEX, 0.5,
                                 color, 3)  # Certeza de predição da classe
 
-                    classes_dict = {'medidas 1': int(x1), 'classe 1': classes[int(cls_pred)], 'medidas 2': int(y1),
-                                    'classe 2': classes[int(cls_pred)], 'medidas 3': int(x2), 'classe 3': classes[int(cls_pred)],
-                                    'medidas 4': int(x2), 'classe 4': classes[int(cls_pred)]}
-                    name_list.append(classes_dict)
-                    print(classes_dict)
+                    # classes_dict = {'medidas 1': int(x1), 'classe 1': classes[int(cls_pred)], 'medidas 2': int(y1),
+                    #                 'classe 2': classes[int(cls_pred)], 'medidas 3': int(x2), 'classe 3': classes[int(cls_pred)],
+                    #                 'medidas 4': int(y2), 'classe 4': classes[int(cls_pred)]}
 
-                    # conversao dict para json format
-                    json_convert = json.dumps(classes_dict,indent=4)
-                    print(json_convert)
 
-        # Convertemos de volta a BGR para que OpenCV possa colocar nas cores corretas
+                    if classes[int(cls_pred)] == 'mola':
+                        classes_dict = {'dist': int(x1), 'classe': classes[int(cls_pred)]}
+                        lista_mola.append(classes_dict)
+
+                    if classes[int(cls_pred)] == 'pino':
+                        classes_dict = {'dist': int(x1), 'classe': classes[int(cls_pred)]}
+                        lista_pino.append(classes_dict)
+
+                # lista ordenada para mola
+                sorted_lista_mola = sorted(lista_mola, key=itemgetter('dist'))
+                json_convert_mola = json.dumps(sorted_lista_mola,indent=4)
+                # print(json_convert_mola)
+
+                # lista ordenada para pino
+
+                sorted_lista_pino = sorted(lista_pino, key=itemgetter('dist'))
+                json_convert_pino = json.dumps(sorted_lista_pino, indent=4)
+                # print(json_convert_pino)
+
+                # print(name_list)
+                print('------------')
+
+                if len(sorted_lista_mola) == 2:
+                    # print('status mola ---- OK')
+                    dict_mola = {'tipo': 'mola','status': 'APROVADO','QTD':len(sorted_lista_mola)}
+                    print(json.dumps(dict_mola, indent=4))
+                else:
+                    dict_mola = {'tipo': 'mola','status': 'NG','QTD':len(sorted_lista_mola)}
+                    print(json.dumps(dict_mola, indent=4))
+
+                if len(sorted_lista_pino) == 4:
+                    # print('status pino ---- OK')
+                    dict_pino = {'tipo': 'pino','status': 'APROVADO','QTD':len(sorted_lista_pino)}
+                    print(json.dumps(dict_pino, indent=4))
+                else:
+                    dict_pino = {'tipo': 'pino','status': 'NG','QTD':len(sorted_lista_pino)}
+                    print(json.dumps(dict_pino, indent=4))
 
         if opt.webcam == 1:
             cv2.imshow('frame', converter_bgr(RGBimg))
             out.write(RGBimg)
         else:
-            out.write(converter_bgr(RGBimg))
+            # out.write(converter_bgr(RGBimg))
             cv2.imshow('Salcomp Processo', RGBimg)
         # cv2.waitKey(0)
         # Pressione Q no teclado para terminar o processo de execução do algoritmo (quit)
         if cv2.waitKey(25) & 0xFF == ord('q'):
             break
-    out.release()
+    # out.release()
     cap.release()
     cv2.destroyAllWindows()

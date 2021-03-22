@@ -1,6 +1,7 @@
 import cv2
 
-cap1 = cv2.VideoCapture("/home/cesar/Downloads/fhd_c_ilum.mp4")
+cap1 = cv2.VideoCapture("/home/cesarhcq/Desktop/data_2/videos/fhd_c_ilum")
+
 
 i = 0
 while True:
@@ -10,6 +11,6 @@ while True:
 
         if i % 1 == 0:
             print(i)
-            cv2.imwrite("/home/cesar/data/images/"+str(i)+"_frame.jpg", frame1)
+            cv2.imwrite("/home/cesarhcq/Desktop/data_2/images/" + str(i) + "_frame.jpg", frame1)
         i = i + 1
         print(i)
