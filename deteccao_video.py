@@ -3,6 +3,7 @@ from __future__ import division
 import argparse
 import json
 from json.decoder import JSONDecodeError
+from operator import itemgetter
 
 import cv2
 
@@ -33,26 +34,15 @@ def converter_bgr(img):
     return img
 
 
-def receive_protocol(message):
-    try:
-        return json.loads(message)
-    except JSONDecodeError:
-        return {"action": "unknow"}
-
-
-def build_response(message_id, result, measurements):
+def build_response(message_id, measurements):
     """
     :param message_id: The message identifier who requested the test
-    :param result: the result of the test PASS/FAILL
     :param measurements: the measurements used in the validation
     :return: dict
     """
     protocol = {
         "id": message_id,
-        "response": {
-            "status": result,
-            "data": measurements
-        }
+        "response": measurements
     }
     return protocol
 
@@ -65,6 +55,16 @@ class Detect:
         self._start_device()
         self._start_model()
         self._start_output()
+
+    def receive_protocol(self, message):
+        try:
+            data = json.loads(message)
+            identifier = data["id"].split("@")[0]
+            return identifier, data
+        except JSONDecodeError:
+            return False, {"action": "unknown"}
+        except KeyError:
+            return False, {"action": "protocol needs an identifier"}
 
     def _start_device(self):
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -99,7 +99,7 @@ class Detect:
         self.cap.release()
         cv2.destroyAllWindows()
 
-    def run(self):
+    def run(self, identifier):
         while self.cap:
             ret, frame = self.cap.read()
             if ret is False:
@@ -117,22 +117,59 @@ class Detect:
                 detections = self.model(imgTensor)
                 detections = non_max_suppression(detections, opt.conf_thres, opt.nms_thres)
 
+            lista_mola = []
+            lista_pino = []
+
             for detection in detections:
                 if detection is not None:
                     detection = rescale_boxes(detection, opt.img_size, RGBimg.shape[:2])
-                    x1, y1, x2, y2, conf, cls_conf, cls_pred = detection[0]
-                    classes_dict = {
-                        'medidas_1': int(x1),
-                        'classe_1': self.classes[int(cls_pred)],
-                        'medidas_2': int(y1),
-                        'classe_2': self.classes[int(cls_pred)],
-                        'medidas_3': int(x2),
-                        'classe_3': self.classes[int(cls_pred)],
-                        'medidas_4': int(x2),
-                        'classe_4': self.classes[int(cls_pred)]
-                    }
+                    for x1, y1, x2, y2, conf, cls_conf, cls_pred in detection:
+                        if self.classes[int(cls_pred)] == 'mola':
+                            classes_dict = {'dist': int(x1), 'classe': self.classes[int(cls_pred)]}
+                            lista_mola.append(classes_dict)
+
+                        if self.classes[int(cls_pred)] == 'pino':
+                            classes_dict = {'dist': int(x1), 'classe': self.classes[int(cls_pred)]}
+                            lista_pino.append(classes_dict)
+
+                    # lista ordenada para mola
+                    sorted_lista_mola = sorted(lista_mola, key=itemgetter('dist'))
+                    # json_convert_mola = json.dumps(sorted_lista_mola, indent=4)
+                    # print(json_convert_mola)
+
+                    # lista ordenada para pino
+
+                    sorted_lista_pino = sorted(lista_pino, key=itemgetter('dist'))
+                    # json_convert_pino = json.dumps(sorted_lista_pino, indent=4)
+                    # print(json_convert_pino)
                     # conversao dict para json format
-                    return build_response("123", "PASS", classes_dict)
+
+                    resultado = {
+                        "molas": self.classify_molas(sorted_lista_mola),
+                        "pinos": self.classify_pinos(sorted_lista_pino),
+                    }
+
+                    return build_response(identifier, resultado)
+
+    def classify_molas(self, molas):
+        if len(molas) == 2:
+            # print('status mola ---- OK')
+            dict_mola = {'tipo': 'mola', 'status': 'APROVADO', 'QTD': len(molas)}
+            # print(json.dumps(dict_mola, indent=4))
+        else:
+            dict_mola = {'tipo': 'mola', 'status': 'NG', 'QTD': len(molas)}
+            # print(json.dumps(dict_mola, indent=4))
+        return dict_mola
+
+    def classify_pinos(self, pinos):
+        if len(pinos) == 4:
+            # print('status pino ---- OK')
+            dict_pino = {'tipo': 'pino', 'status': 'APROVADO', 'QTD': len(pinos)}
+            # print(json.dumps(dict_pino, indent=4))
+        else:
+            dict_pino = {'tipo': 'pino', 'status': 'NG', 'QTD': len(pinos)}
+            # print(json.dumps(dict_pino, indent=4))
+        return dict_pino
 
 
 if __name__ == "__main__":
@@ -143,7 +180,7 @@ if __name__ == "__main__":
     parser.add_argument("--weights_path", type=str, default="checkpoints/yolov3_ckpt_99.pth",
                         help="path to weights file")
     parser.add_argument("--class_path", type=str, default="data/custom/classes.names", help="path to class label file")
-    parser.add_argument("--conf_thres", type=float, default=0.8, help="object confidence threshold")
+    parser.add_argument("--conf_thres", type=float, default=0.85, help="object confidence threshold")
     parser.add_argument("--webcam", type=int, default=0, help="Is the video processed video? 1 = Yes, 0 == no")
     parser.add_argument("--nms_thres", type=float, default=0.4, help="iou thresshold for non-maximum suppression")
     parser.add_argument("--batch_size", type=int, default=1, help="size of the batches")
@@ -162,17 +199,17 @@ if __name__ == "__main__":
     try:
         while True:
             # Receive command
-            receive_cmd = receive_protocol(input())
+            identifier, receive_cmd = detection.receive_protocol(input())
 
             if receive_cmd["action"] == "test":
                 # Execute detection
-                result = detection.run()
+                result = detection.run(identifier)
 
                 # Send the result of detection to STDOUT
                 print(json.dumps(result))
             elif receive_cmd["action"] == "ping":
                 print(json.dumps({
-                    "id": receive_cmd["id"],
+                    "id": identifier,
                     "action": "ping",
                     "response": "pong"
                 }))

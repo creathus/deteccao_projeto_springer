@@ -36,7 +36,7 @@ Movemos os pesos baixados na pasta chamada weights
 mv yolov3.weights weights/
 ```
 
-# Executar o detector de objetos em vídeo
+<!-- # Executar o detector de objetos em vídeo
 Para a aplicação do Projeto Springer, podemos executar o script ```deteccao_video.py``` e dessa forma abrir a câmera de vídeo (webcam). Em ambientes linux, verifique em qual **device** a sua câmera está sendo reconhecida. Para isso, utilize o comando no terminal ```ls /dev/video*```.
 ```
 python deteccao_video.py
@@ -47,7 +47,7 @@ Caso seja necessário rodar o script com algum vídeo do processo treinado sendo
 
 ```
 python deteccao_video.py --webcam 0 --diretorio_do_video <nome_do_arquivo.mp4>
-```
+``` -->
 # Treinamento
 
 Para o presente projeto deve-se criar um modelo com as classes que são necessárias, tais como: "pino e molas". Tome cuidado para que o dataset do próprio Yolo seja incluído, pois resultará em ruídos desnecessários para a solução. A seguir, são demonstrados como serão reaizados as etapas de treinamento e geração de **labels** customizado.
