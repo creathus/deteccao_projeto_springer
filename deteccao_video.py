@@ -217,9 +217,13 @@ class Detect:
                 raw_data[which]["pin_b"] = {"x": float(pairs[1][0]), "y": float(pairs[1][1])}
                 raw_data[which]["diff"] = float(dist)
 
+        # Existe a quantidade correta de PINOS ?
         is_quantity_ok = qty == 4
+        # A distâncias entre os pinos da esquerda está dentro do aceitável ?
         is_left_ok = self.verify_pinos_distance(raw_data["left"]["diff"])
+        # A distâncias entre os pinos da direita está dentro do aceitável ?
         is_right_ok = self.verify_pinos_distance(raw_data["right"]["diff"])
+        # Se tudo estiver correto, então APROVADO, se não REPROVADO
         status = "APROVADO" if is_quantity_ok and is_left_ok and is_right_ok else "NG"
         return {'tipo': 'pino', 'status': status, 'QTD': qty, "raw": raw_data}
 
