@@ -205,6 +205,9 @@ class Detect:
                         "molas": self.classify_molas(sorted_lista_mola, molas_centroids),
                         "pinos": self.classify_pinos(sorted_lista_pino, pinos_centroids),
                     }
+                    if self.opt.show_result:
+                        print(json.dumps(resultado, indent=4))
+
                     if only_first_detection:
                         return build_response(identifier, resultado)
 
