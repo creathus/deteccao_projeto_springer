@@ -145,12 +145,12 @@ class Detect:
 
     def run(self, identifier, only_first_detection=True):
         while self.cap:
-            ret, frame = self.cap.read()
+            ret, self.frame = self.cap.read()
             if ret is False:
                 return
-            frame = cv2.resize(frame, self.dim, interpolation=cv2.INTER_CUBIC)
+            self.frame = cv2.resize(self.frame, self.dim, interpolation=cv2.INTER_CUBIC)
             # A imagem vem em BGR e é convertida em RGB que é o que o modelo requer
-            RGBimg = converter_rgb(frame)
+            RGBimg = converter_rgb(self.frame)
             imgTensor = transforms.ToTensor()(RGBimg)
             imgTensor, _ = pad_to_square(imgTensor, 0)
             imgTensor = resize(imgTensor, 416)
@@ -179,11 +179,11 @@ class Detect:
 
                         if self.opt.show_result:
                             color = [int(c) for c in self.colors[int(cls_pred)]]
-                            frame = cv2.rectangle(frame, (x1, y1 + box_h), (x2, y1), color, 3)
-                            cv2.putText(frame, self.classes[int(cls_pred)], (x1, y1), cv2.FONT_HERSHEY_SIMPLEX, 1,
+                            self.frame = cv2.rectangle(self.frame, (x1, y1 + box_h), (x2, y1), color, 3)
+                            cv2.putText(self.frame, self.classes[int(cls_pred)], (x1, y1), cv2.FONT_HERSHEY_SIMPLEX, 1,
                                         color,
                                         3)  # Nome da classe detectada
-                            cv2.putText(frame, str("%.2f" % float(conf)), (x2, y2 - box_h), cv2.FONT_HERSHEY_SIMPLEX,
+                            cv2.putText(self.frame, str("%.2f" % float(conf)), (x2, y2 - box_h), cv2.FONT_HERSHEY_SIMPLEX,
                                         0.5,
                                         color, 3)  # Certeza de predição da classe
 
@@ -243,6 +243,12 @@ class Detect:
             pino_pairs = calculate_perm([*centroid_pairs])
             for pairs in pino_pairs:
                 dist = calculate_centr_distances(pairs[0], pairs[1])
+                if self.opt.show_result:
+                    # Calculate middle point
+                    middle = midpoint(pairs[0], pairs[1])
+                    cv2.circle(self.frame, middle, 5, color=(255, 0, 0), thickness=2)
+                    cv2.line(self.frame, pairs[0], pairs[1], color=(0, 0, 0), thickness=3)
+
                 # primeiro par é esquerdo e o segundo par é direito.
                 which = "left" if i == 0 else "right"
                 raw_data[which]["pin_a"] = {"x": float(pairs[0][0]), "y": float(pairs[0][1])}
