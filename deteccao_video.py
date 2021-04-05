@@ -98,7 +98,7 @@ class Detect:
             print(opt)
         self._start_device()
         self._start_model()
-        self._start_output()
+        self._start_input_and_output()
 
     def receive_protocol(self, message):
         try:
@@ -125,7 +125,7 @@ class Detect:
         self.model.eval()
         self.classes = load_classes(opt.class_path)
 
-    def _start_output(self):
+    def _start_input_and_output(self):
         if self.opt.webcam == 1:
             self.cap = cv2.VideoCapture(0)
             # cap.set(10, 180)
@@ -143,7 +143,7 @@ class Detect:
         self.cap.release()
         cv2.destroyAllWindows()
 
-    def run(self, identifier):
+    def run(self, identifier, only_first_detection=True):
         while self.cap:
             ret, frame = self.cap.read()
             if ret is False:
@@ -176,6 +176,17 @@ class Detect:
                         coord = [x1, y1, box_w, box_h]
                         # Calculate the center of box
                         centroid = calculate_centr(coord)
+
+                        if self.opt.show_result:
+                            color = [int(c) for c in self.colors[int(cls_pred)]]
+                            frame = cv2.rectangle(frame, (x1, y1 + box_h), (x2, y1), color, 3)
+                            cv2.putText(frame, self.classes[int(cls_pred)], (x1, y1), cv2.FONT_HERSHEY_SIMPLEX, 1,
+                                        color,
+                                        3)  # Nome da classe detectada
+                            cv2.putText(frame, str("%.2f" % float(conf)), (x2, y2 - box_h), cv2.FONT_HERSHEY_SIMPLEX,
+                                        0.5,
+                                        color, 3)  # Certeza de predição da classe
+
                         if self.classes[int(cls_pred)] == 'mola':
                             molas_centroids.append(centroid)
                             classes_dict = {'dist': int(x1), 'classe': self.classes[int(cls_pred)]}
@@ -194,8 +205,26 @@ class Detect:
                         "molas": self.classify_molas(sorted_lista_mola, molas_centroids),
                         "pinos": self.classify_pinos(sorted_lista_pino, pinos_centroids),
                     }
+                    if only_first_detection:
+                        return build_response(identifier, resultado)
 
-                    return build_response(identifier, resultado)
+            if self.opt.show_result:
+                # Convertemos de volta a BGR para que OpenCV possa colocar nas cores corretas
+                if opt.webcam == 1:
+                    cv2.imshow('frame', converter_bgr(RGBimg))
+                    self.out.write(RGBimg)
+                else:
+                    self.out.write(converter_bgr(RGBimg))
+                    cv2.imshow('Salcomp Processo', RGBimg)
+                    # cv2.waitKey(0)
+                    # Pressione Q no teclado para terminar o processo de execução do algoritmo (quit)
+                if cv2.waitKey(25) & 0xFF == ord('q'):
+                    break
+
+        if self.opt.show_result:
+            self.out.release()
+            self.cap.release()
+            cv2.destroyAllWindows()
 
     def classify_molas(self, molas, centroids):
         qty = len(molas)
@@ -237,33 +266,7 @@ class Detect:
         return dist
 
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--image_folder", type=str, default="data/samples", help="path to dataset")
-    parser.add_argument("--model_def", type=str, default="config/yolov3-custom.cfg",
-                        help="path to model definition file")
-    parser.add_argument("--weights_path", type=str, default="checkpoints/yolov3_ckpt_99.pth",
-                        help="path to weights file")
-    parser.add_argument("--class_path", type=str, default="data/custom/classes.names", help="path to class label file")
-    parser.add_argument("--conf_thres", type=float, default=0.85, help="object confidence threshold")
-    parser.add_argument("--webcam", type=int, default=0, help="Is the video processed video? 1 = Yes, 0 == no")
-    parser.add_argument("--nms_thres", type=float, default=0.4, help="iou threshold for non-maximum suppression")
-    parser.add_argument("--pin_min_approval_thres", type=float, default=0.4,
-                        help="pin min distance threshold for approval")
-    parser.add_argument("--pin_max_approval_thres", type=float, default=0.4,
-                        help="pin max distance threshold for approval")
-    parser.add_argument("--batch_size", type=int, default=1, help="size of the batches")
-    parser.add_argument("--n_cpu", type=int, default=0, help="number of cpu threads to use during batch generation")
-    parser.add_argument("--img_size", type=int, default=416, help="size of each image dimension")
-    parser.add_argument("--directorio_video", type=str, default="videos/fhd_c_ilum.mp4", help="Directorio al video")
-    parser.add_argument("--checkpoint_model", type=str, help="path to checkpoint model")
-    parser.add_argument("--show_result", type=bool, default=False, help="after the detection, should display the image")
-    parser.add_argument("--debug", type=bool, default=False, help="print debug messages in the execution")
-    opt = parser.parse_args()
-
-    # Starts detection object
-    detection = Detect(opt)
-
+def middleware_execution(detection):
     # Waits for a command as protocol
     try:
         while True:
@@ -290,3 +293,39 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         # Received interruption
         detection.stop()
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--image_folder", type=str, default="data/samples", help="path to dataset")
+    parser.add_argument("--model_def", type=str, default="config/yolov3-custom.cfg",
+                        help="path to model definition file")
+    parser.add_argument("--weights_path", type=str, default="checkpoints/yolov3_ckpt_99.pth",
+                        help="path to weights file")
+    parser.add_argument("--class_path", type=str, default="data/custom/classes.names", help="path to class label file")
+    parser.add_argument("--conf_thres", type=float, default=0.85, help="object confidence threshold")
+    parser.add_argument("--webcam", type=int, default=0, help="Is the video processed video? 1 = Yes, 0 == no")
+    parser.add_argument("--nms_thres", type=float, default=0.4, help="iou threshold for non-maximum suppression")
+    parser.add_argument("--pin_min_approval_thres", type=float, default=0.4,
+                        help="pin min distance threshold for approval")
+    parser.add_argument("--pin_max_approval_thres", type=float, default=0.4,
+                        help="pin max distance threshold for approval")
+    parser.add_argument("--batch_size", type=int, default=1, help="size of the batches")
+    parser.add_argument("--n_cpu", type=int, default=0, help="number of cpu threads to use during batch generation")
+    parser.add_argument("--img_size", type=int, default=416, help="size of each image dimension")
+    parser.add_argument("--directorio_video", type=str, default="videos/fhd_c_ilum.mp4", help="Directorio al video")
+    parser.add_argument("--checkpoint_model", type=str, help="path to checkpoint model")
+    parser.add_argument("--show_result", type=bool, default=False, help="after the detection, should display the image")
+    parser.add_argument("--debug", type=bool, default=False, help="print debug messages in the execution")
+    parser.add_argument("--runtime", type=bool, default=False, help="run as runtime - wait commands to execute")
+    opt = parser.parse_args()
+
+    # Starts detection object
+    detection = Detect(opt)
+
+    if opt.runtime:
+        # Roda em modo de solicitação e resposta - integração com o middleware
+        middleware_execution(detection)
+    else:
+        # Roda em modo de debug, de forma contínua
+        detection.run("id", only_first_detection=False)
