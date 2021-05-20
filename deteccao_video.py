@@ -183,7 +183,8 @@ class Detect:
                             cv2.putText(self.frame, self.classes[int(cls_pred)], (x1, y1), cv2.FONT_HERSHEY_SIMPLEX, 1,
                                         color,
                                         3)  # Nome da classe detectada
-                            cv2.putText(self.frame, str("%.2f" % float(conf)), (x2, y2 - box_h), cv2.FONT_HERSHEY_SIMPLEX,
+                            cv2.putText(self.frame, str("%.2f" % float(conf)), (x2, y2 - box_h),
+                                        cv2.FONT_HERSHEY_SIMPLEX,
                                         0.5,
                                         color, 3)  # Certeza de predição da classe
 
@@ -257,10 +258,16 @@ class Detect:
 
         # Existe a quantidade correta de PINOS ?
         is_quantity_ok = qty == 4
+        is_left_ok = False
+        is_right_ok = False
         # A distâncias entre os pinos da esquerda está dentro do aceitável ?
-        is_left_ok = self.verify_pinos_distance(raw_data["left"]["diff"])
+        if "diff" in raw_data["left"]:
+            is_left_ok = self.verify_pinos_distance(raw_data["left"]["diff"])
+
         # A distâncias entre os pinos da direita está dentro do aceitável ?
-        is_right_ok = self.verify_pinos_distance(raw_data["right"]["diff"])
+        if "diff" in raw_data["right"]:
+            is_right_ok = self.verify_pinos_distance(raw_data["right"]["diff"])
+
         # Se tudo estiver correto, então APROVADO, se não REPROVADO
         status = "APROVADO" if is_quantity_ok and is_left_ok and is_right_ok else "NG"
         return {'tipo': 'pino', 'status': status, 'QTD': qty, "raw": raw_data}
@@ -322,7 +329,7 @@ if __name__ == "__main__":
     parser.add_argument("--batch_size", type=int, default=1, help="size of the batches")
     parser.add_argument("--n_cpu", type=int, default=0, help="number of cpu threads to use during batch generation")
     parser.add_argument("--img_size", type=int, default=416, help="size of each image dimension")
-    parser.add_argument("--directorio_video", type=str, default="videos/fhd_c_iluminacao.mp4", help="Directorio al video")
+    parser.add_argument("--directorio_video", type=str, default="videos/fhd_c_ilum.mp4", help="Directorio al video")
     parser.add_argument("--checkpoint_model", type=str, help="path to checkpoint model")
     parser.add_argument("--show_result", type=bool, default=True, help="after the detection, should display the image")
     parser.add_argument("--debug", type=bool, default=False, help="print debug messages in the execution")
